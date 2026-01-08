@@ -1,0 +1,69 @@
+---
+title: tokenomics
+description: 'how noice tokens work'
+---
+
+## fixed tokenomics
+
+every token launched on noice has the same structure. this keeps things simple and fair.
+
+### supply
+
+```
+total supply: 1,000,000,000 tokens
+```
+
+### allocation
+
+| allocation | percentage | purpose |
+|------------|------------|---------|
+| retail | 50% | available for trading |
+| growth wallet | 40% | locked for marketplace spending |
+| team | 10% | vested over time |
+
+### trading tax
+
+every trade has a 2% fee:
+
+| recipient | percentage |
+|-----------|------------|
+| founder (you) | 1.6% |
+| noice | 0.4% |
+
+## growth wallet
+
+the 40% growth wallet allocation can only be spent on suppliers in the noice marketplace. this ensures the tokens flow back into growth activities.
+
+### how it works
+
+1. tokens are held in a smart contract
+2. you request a quote from a supplier
+3. supplier accepts and sets a price
+4. tokens are released to supplier upon delivery approval
+
+### spending tokens vs usdc
+
+you can pay suppliers in:
+- **usdc** from trading tax revenue
+- **tokens** from your growth wallet allocation
+
+most suppliers accept both. token payments are typically discounted.
+
+## pairing
+
+all tokens are paired to usdc on base. this provides:
+- stable pricing
+- easy on/off ramps
+- liquid markets
+
+## contract addresses
+
+<Note>
+contracts are open source and verified on basescan.
+</Note>
+
+- factory: `0x...` (coming soon)
+- router: `0x...` (coming soon)
+- growth wallet template: `0x...` (coming soon)
+
+see [github.com/noiceengg/contracts](https://github.com/noiceengg/contracts) for source code.

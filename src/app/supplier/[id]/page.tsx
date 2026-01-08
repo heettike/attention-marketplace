@@ -18,6 +18,8 @@ import {
   ExternalLink,
   CheckCircle2,
   MessageSquare,
+  Eye,
+  BookOpen,
 } from "lucide-react";
 
 export default function SupplierPage() {
@@ -124,7 +126,20 @@ export default function SupplierPage() {
               </span>
             </div>
 
-            {/* price prominently displayed */}
+            {/* views per dollar - key metric */}
+            {supplier.viewsPerDollar > 0 && (
+              <div className="p-4 bg-accent-green/10 border border-accent-green/20 rounded-lg mb-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Eye className="w-4 h-4 text-accent-green" />
+                  <span className="text-xs text-muted-foreground">views per $1 spent</span>
+                </div>
+                <p className="text-3xl font-semibold text-accent-green font-mono">
+                  {supplier.viewsPerDollar}
+                </p>
+              </div>
+            )}
+
+            {/* price */}
             <div className="p-4 bg-secondary/50 rounded-lg mb-4">
               <p className="text-2xl font-semibold">
                 ${formatNumber(supplier.price)}
@@ -155,6 +170,50 @@ export default function SupplierPage() {
             </Button>
           </GlassCard>
         </div>
+
+        {/* proof of work - verified results */}
+        {supplier.proofOfWork.length > 0 && (
+          <GlassCard className="p-6 mb-8">
+            <h2 className="font-semibold mb-4 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-accent-green" />
+              verified results
+            </h2>
+            <div className="space-y-4">
+              {supplier.proofOfWork.map((proof, i) => (
+                <div key={i} className="p-4 bg-secondary/30 rounded-lg">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <p className="font-medium">{proof.client}</p>
+                      <p className="text-sm text-muted-foreground">{proof.description}</p>
+                    </div>
+                    <a
+                      href={proof.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 text-xs bg-secondary rounded hover:bg-secondary/80 transition-colors flex items-center gap-1"
+                    >
+                      view proof
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-6 text-sm">
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <DollarSign className="w-4 h-4" />
+                      ${formatNumber(proof.cost)} spent
+                    </span>
+                    <span className="flex items-center gap-1.5 text-accent-green">
+                      <Eye className="w-4 h-4" />
+                      {formatNumber(proof.views)} views
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      ({Math.round(proof.views / proof.cost)} views/$1)
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        )}
 
         {/* results */}
         {supplier.results.length > 0 && (
@@ -244,7 +303,18 @@ export default function SupplierPage() {
 
         {/* how payments work */}
         <GlassCard className="p-6">
-          <h2 className="font-semibold mb-6">how payments work on noice</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-semibold">how payments work on noice</h2>
+            <a
+              href="https://docs.noice.so/marketplace/hiring"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-accent-warm hover:underline flex items-center gap-1"
+            >
+              <BookOpen className="w-3 h-3" />
+              full guide
+            </a>
+          </div>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
               <div className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center mb-3">

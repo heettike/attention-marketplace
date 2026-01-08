@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: "/", label: "home" },
   { href: "/marketplace", label: "marketplace" },
   { href: "/launch", label: "launch" },
+  { href: "https://docs.noice.so", label: "docs", external: true },
 ];
 
 export function Navbar() {
@@ -27,6 +28,19 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-6">
             {NAV_ITEMS.map((item) => {
               const isActive = pathname === item.href;
+              if ('external' in item && item.external) {
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
               return (
                 <Link
                   key={item.href}

@@ -13,7 +13,7 @@ import {
   getRecommendedStrategy,
   formatNumber,
 } from "@/lib/data";
-import { Search, Star, ArrowUpRight, Sparkles } from "lucide-react";
+import { Search, Star, ArrowUpRight, Sparkles, TrendingUp, Eye } from "lucide-react";
 
 function MarketplaceContent() {
   const searchParams = useSearchParams();
@@ -59,12 +59,25 @@ function MarketplaceContent() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* header */}
         <div className="mb-12">
-          <h1 className="text-3xl font-semibold mb-2">
-            attention marketplace
-          </h1>
-          <p className="text-muted-foreground">
-            vetted suppliers ready to amplify your startup&apos;s reach
-          </p>
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-3xl font-semibold mb-2">
+                attention marketplace
+              </h1>
+              <p className="text-muted-foreground">
+                vetted suppliers ready to amplify your startup&apos;s reach
+              </p>
+            </div>
+            <a
+              href="https://docs.noice.so/marketplace/hiring"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1.5 px-3 py-1.5 bg-secondary rounded-lg"
+            >
+              <TrendingUp className="w-4 h-4" />
+              how it works
+            </a>
+          </div>
         </div>
 
         {/* strategy recommendation */}
@@ -190,27 +203,40 @@ function MarketplaceContent() {
                   {supplier.tagline}
                 </p>
 
-                {/* price prominently displayed */}
-                <div className="p-3 bg-secondary/50 rounded-lg mb-4">
-                  <p className="text-xl font-semibold">
-                    ${formatNumber(supplier.price)}
-                    <span className="text-sm font-normal text-muted-foreground ml-1">
-                      {supplier.priceUnit}
-                    </span>
-                  </p>
-                </div>
-
-                {/* results preview */}
-                {supplier.results.length > 0 && (
-                  <div className="space-y-1 mb-4">
-                    {supplier.results.slice(0, 2).map((r, i) => (
-                      <p key={i} className="text-xs">
-                        <span className="text-muted-foreground">{r.metric}:</span>{" "}
-                        <span className="text-accent-green font-mono">{r.value}</span>
-                      </p>
-                    ))}
+                {/* views per dollar - the key metric */}
+                {supplier.viewsPerDollar > 0 ? (
+                  <div className="p-3 bg-accent-green/10 border border-accent-green/20 rounded-lg mb-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Eye className="w-4 h-4 text-accent-green" />
+                      <span className="text-xs text-muted-foreground">views per $1</span>
+                    </div>
+                    <p className="text-2xl font-semibold text-accent-green font-mono">
+                      {supplier.viewsPerDollar}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-secondary/50 rounded-lg mb-4">
+                    <p className="text-sm text-muted-foreground">non-attention service</p>
+                    <p className="text-xl font-semibold">
+                      ${formatNumber(supplier.price)}
+                      <span className="text-sm font-normal text-muted-foreground ml-1">
+                        {supplier.priceUnit}
+                      </span>
+                    </p>
                   </div>
                 )}
+
+                {/* price and proof of work count */}
+                <div className="flex items-center justify-between text-sm mb-4">
+                  <span className="text-muted-foreground">
+                    ${formatNumber(supplier.price)} {supplier.priceUnit}
+                  </span>
+                  {supplier.proofOfWork.length > 0 && (
+                    <span className="text-accent-warm">
+                      {supplier.proofOfWork.length} verified {supplier.proofOfWork.length === 1 ? 'result' : 'results'}
+                    </span>
+                  )}
+                </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-border">
                   <div className="flex items-center gap-1 text-sm">

@@ -21,6 +21,9 @@ import {
   ExternalLink,
   Star,
   ArrowLeft,
+  Eye,
+  DollarSign,
+  BookOpen,
 } from "lucide-react";
 
 export default function CompanyPage() {
@@ -230,6 +233,77 @@ export default function CompanyPage() {
                 </div>
               </GlassCard>
             )}
+
+            {/* proof of work - verified results with links */}
+            <GlassCard className="p-6">
+              <h2 className="font-semibold mb-4 flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                verified supplier results
+              </h2>
+              {hiredSuppliers.length > 0 ? (
+                <div className="space-y-4">
+                  {hiredSuppliers.map((supplier) => {
+                    const proofForCompany = supplier!.proofOfWork.filter(
+                      (p) => p.client.toLowerCase() === company.name.toLowerCase() || p.client.toLowerCase() === company.id.toLowerCase()
+                    );
+                    if (proofForCompany.length === 0) return null;
+
+                    return (
+                      <div key={supplier!.id} className="border border-border rounded-lg overflow-hidden">
+                        <div className="flex items-center justify-between p-3 bg-secondary/30">
+                          <Link
+                            href={`/supplier/${supplier!.id}`}
+                            className="flex items-center gap-3 hover:text-accent-warm transition-colors"
+                          >
+                            <div className="w-8 h-8 rounded bg-secondary flex items-center justify-center text-sm font-medium">
+                              {supplier!.name[0]}
+                            </div>
+                            <span className="font-medium">{supplier!.name}</span>
+                          </Link>
+                          <span className="text-xs text-muted-foreground">
+                            {supplier!.viewsPerDollar > 0 && (
+                              <span className="text-accent-green">{supplier!.viewsPerDollar} views/$1</span>
+                            )}
+                          </span>
+                        </div>
+                        <div className="p-3 space-y-3">
+                          {proofForCompany.map((proof, i) => (
+                            <div key={i} className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <p className="text-sm">{proof.description}</p>
+                                <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
+                                  <span className="flex items-center gap-1">
+                                    <DollarSign className="w-3 h-3" />
+                                    ${formatNumber(proof.cost)}
+                                  </span>
+                                  <span className="flex items-center gap-1 text-accent-green">
+                                    <Eye className="w-3 h-3" />
+                                    {formatNumber(proof.views)} views
+                                  </span>
+                                </div>
+                              </div>
+                              <a
+                                href={proof.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1.5 text-xs bg-secondary rounded hover:bg-secondary/80 transition-colors flex items-center gap-1"
+                              >
+                                view proof
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm text-center py-6">
+                  no verified results yet
+                </p>
+              )}
+            </GlassCard>
 
             {/* growth partners */}
             <GlassCard className="p-6">

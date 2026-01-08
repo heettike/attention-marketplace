@@ -14,6 +14,8 @@ import {
   Rocket,
   Sparkles,
   Globe,
+  BookOpen,
+  ExternalLink,
 } from "lucide-react";
 
 type Step = "connect" | "info" | "token" | "preview" | "success";
@@ -242,7 +244,18 @@ export default function LaunchPage() {
 
                   {/* fixed tokenomics */}
                   <div className="p-4 bg-secondary/50 rounded-lg">
-                    <p className="text-sm font-medium mb-3">fixed tokenomics</p>
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-medium">fixed tokenomics</p>
+                      <a
+                        href="https://docs.noice.so/tokenomics"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-accent-warm hover:underline flex items-center gap-1"
+                      >
+                        <BookOpen className="w-3 h-3" />
+                        learn more
+                      </a>
+                    </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className="text-muted-foreground">total supply</p>

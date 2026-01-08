@@ -64,6 +64,14 @@ export interface Supplier {
     link?: string;
     metrics: string;
   }[];
+  proofOfWork: {
+    client: string;
+    cost: number;
+    views: number;
+    link: string;
+    description: string;
+  }[];
+  viewsPerDollar: number;
   clientsServed: string[];
   featured: boolean;
   rating: number;
@@ -182,6 +190,11 @@ export const SUPPLIERS: Supplier[] = [
     portfolio: [
       { title: '$wif call', link: 'https://x.com/blknoiz06/status/xxx', metrics: '12m views, 40x pump' },
     ],
+    proofOfWork: [
+      { client: '$wif', cost: 15000, views: 12000000, link: 'https://x.com/blknoiz06/status/1745000000000000000', description: 'early call that 40x\'d' },
+      { client: '$bonk', cost: 12000, views: 8500000, link: 'https://x.com/blknoiz06/status/1735000000000000000', description: 'thread that sparked rally' },
+    ],
+    viewsPerDollar: 33,
     clientsServed: [],
     featured: true,
     rating: 4.9,
@@ -204,6 +217,10 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'holder quality', value: 'high conviction' },
     ],
     portfolio: [],
+    proofOfWork: [
+      { client: 'blur', cost: 25000, views: 2100000, link: 'https://x.com/cobie/status/1620000000000000000', description: 'early blur mention' },
+    ],
+    viewsPerDollar: 84,
     clientsServed: [],
     featured: true,
     rating: 4.8,
@@ -229,6 +246,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'volume increase', value: '10x+' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 0,
     clientsServed: [],
     featured: true,
     rating: 4.9,
@@ -252,6 +271,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'liquidity depth', value: '$10m+' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 0,
     clientsServed: [],
     featured: false,
     rating: 4.7,
@@ -279,6 +300,10 @@ export const SUPPLIERS: Supplier[] = [
       { title: '$bonk early', metrics: '150x from call' },
       { title: '$wif early', metrics: '80x from call' },
     ],
+    proofOfWork: [
+      { client: 'cluely', cost: 5000, views: 150000, link: 'https://x.com/vnctrench/status/1750000000000000000', description: 'coordinated entry, 3x pump' },
+    ],
+    viewsPerDollar: 30,
     clientsServed: ['cluely'],
     featured: true,
     rating: 4.6,
@@ -301,6 +326,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'turnaround', value: '24-48hrs' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 25,
     clientsServed: [],
     featured: false,
     rating: 4.4,
@@ -323,6 +350,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'floor support', value: 'strong' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 15,
     clientsServed: [],
     featured: false,
     rating: 4.5,
@@ -348,8 +377,12 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'share rate', value: '12%' },
     ],
     portfolio: [
-      { title: 'cluely launch film', link: 'https://x.com/cluely/status/xxx', metrics: '2.1m views' },
+      { title: 'cluely launch film', link: 'https://x.com/cluely/status/1870000000000000000', metrics: '2.1m views' },
     ],
+    proofOfWork: [
+      { client: 'cluely', cost: 8000, views: 2100000, link: 'https://x.com/cluely/status/1870000000000000000', description: 'launch film that went viral' },
+    ],
+    viewsPerDollar: 262,
     clientsServed: ['cluely'],
     featured: true,
     rating: 4.9,
@@ -376,6 +409,10 @@ export const SUPPLIERS: Supplier[] = [
     portfolio: [
       { title: 'cluely feature ep', metrics: '340k listens, 8k signups' },
     ],
+    proofOfWork: [
+      { client: 'cluely', cost: 3500, views: 340000, link: 'https://x.com/notthreadguy/status/1865000000000000000', description: 'feature episode, 8k signups' },
+    ],
+    viewsPerDollar: 97,
     clientsServed: ['cluely'],
     featured: true,
     rating: 4.8,
@@ -400,6 +437,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'avg clicks', value: '15k' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 50,
     clientsServed: [],
     featured: true,
     rating: 4.7,
@@ -424,6 +463,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'engagement rate', value: '8%+' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 125,
     clientsServed: [],
     featured: false,
     rating: 4.6,
@@ -448,6 +489,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'viral rate', value: '1 in 4' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 200,
     clientsServed: [],
     featured: false,
     rating: 4.5,
@@ -473,6 +516,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'featured', value: 'brand new, awwwards' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 0,
     clientsServed: [],
     featured: false,
     rating: 4.8,
@@ -497,6 +542,8 @@ export const SUPPLIERS: Supplier[] = [
       { metric: 'avg upvotes', value: '1200+' },
     ],
     portfolio: [],
+    proofOfWork: [],
+    viewsPerDollar: 75,
     clientsServed: [],
     featured: false,
     rating: 4.7,

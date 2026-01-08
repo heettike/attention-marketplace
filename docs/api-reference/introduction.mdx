@@ -1,0 +1,85 @@
+---
+title: api reference
+description: 'integrate with noice programmatically'
+---
+
+## overview
+
+the noice api allows you to:
+- fetch token data
+- get supplier listings
+- submit quote requests
+- track campaign results
+
+## authentication
+
+all api requests require an api key:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.noice.so/v1/tokens
+```
+
+## base url
+
+```
+https://api.noice.so/v1
+```
+
+## rate limits
+
+- 100 requests per minute
+- 10,000 requests per day
+
+## endpoints
+
+### tokens
+
+| method | endpoint | description |
+|--------|----------|-------------|
+| GET | /tokens | list all tokens |
+| GET | /tokens/:id | get token details |
+| GET | /tokens/:id/stats | get token stats |
+
+### suppliers
+
+| method | endpoint | description |
+|--------|----------|-------------|
+| GET | /suppliers | list all suppliers |
+| GET | /suppliers/:id | get supplier details |
+| POST | /suppliers/:id/quote | request a quote |
+
+### campaigns
+
+| method | endpoint | description |
+|--------|----------|-------------|
+| GET | /campaigns | list your campaigns |
+| GET | /campaigns/:id | get campaign details |
+| POST | /campaigns/:id/approve | approve delivery |
+
+## webhooks
+
+subscribe to events:
+- `campaign.created`
+- `campaign.funded`
+- `campaign.delivered`
+- `campaign.completed`
+
+```json
+{
+  "event": "campaign.completed",
+  "data": {
+    "campaign_id": "camp_123",
+    "supplier_id": "sup_456",
+    "amount": 5000,
+    "views_generated": 250000
+  }
+}
+```
+
+## sdks
+
+coming soon:
+- javascript/typescript
+- python
+- go
