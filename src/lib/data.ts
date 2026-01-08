@@ -113,16 +113,16 @@ export type SupplierCategory =
   | 'launch';
 
 export const SUPPLIER_CATEGORIES: { id: SupplierCategory; label: string; icon: string }[] = [
-  { id: 'kols', label: 'kols', icon: '📢' },
-  { id: 'market-makers', label: 'market makers', icon: '📊' },
-  { id: 'trenching', label: 'trenching groups', icon: '⛏️' },
-  { id: 'video', label: 'video', icon: '🎬' },
-  { id: 'podcasts', label: 'podcasts', icon: '🎙️' },
-  { id: 'twitter-growth', label: 'twitter growth', icon: '🐦' },
-  { id: 'newsletters', label: 'newsletters', icon: '📧' },
-  { id: 'ghostwriting', label: 'ghostwriting', icon: '✍️' },
-  { id: 'design', label: 'design', icon: '🎨' },
-  { id: 'launch', label: 'launch strategy', icon: '🚀' },
+  { id: 'kols', label: 'kols', icon: 'megaphone' },
+  { id: 'market-makers', label: 'market makers', icon: 'chart-bar' },
+  { id: 'trenching', label: 'trenching groups', icon: 'pickaxe' },
+  { id: 'video', label: 'video', icon: 'video' },
+  { id: 'podcasts', label: 'podcasts', icon: 'mic' },
+  { id: 'twitter-growth', label: 'twitter growth', icon: 'twitter' },
+  { id: 'newsletters', label: 'newsletters', icon: 'mail' },
+  { id: 'ghostwriting', label: 'ghostwriting', icon: 'pen-tool' },
+  { id: 'design', label: 'design', icon: 'palette' },
+  { id: 'launch', label: 'launch strategy', icon: 'rocket' },
 ];
 
 function generatePriceHistory(basePrice: number, days: number = 30): { time: string; price: number }[] {

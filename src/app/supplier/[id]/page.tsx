@@ -20,7 +20,30 @@ import {
   MessageSquare,
   Eye,
   BookOpen,
+  Megaphone,
+  BarChart3,
+  Pickaxe,
+  Video,
+  Mic,
+  Twitter,
+  Mail,
+  PenTool,
+  Palette,
+  Rocket,
 } from "lucide-react";
+
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  megaphone: Megaphone,
+  'chart-bar': BarChart3,
+  pickaxe: Pickaxe,
+  video: Video,
+  mic: Mic,
+  twitter: Twitter,
+  mail: Mail,
+  'pen-tool': PenTool,
+  palette: Palette,
+  rocket: Rocket,
+};
 
 export default function SupplierPage() {
   const params = useParams();
@@ -76,7 +99,10 @@ export default function SupplierPage() {
                 </div>
                 <p className="text-accent-warm mb-2">{supplier.handle}</p>
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-secondary rounded text-xs text-muted-foreground">
-                  <span>{category?.icon}</span>
+                  {category?.icon && (() => {
+                    const IconComponent = CATEGORY_ICONS[category.icon];
+                    return IconComponent ? <IconComponent className="w-3 h-3" /> : null;
+                  })()}
                   {category?.label}
                 </span>
               </div>

@@ -13,7 +13,38 @@ import {
   getRecommendedStrategy,
   formatNumber,
 } from "@/lib/data";
-import { Search, Star, ArrowUpRight, Sparkles, TrendingUp, Eye } from "lucide-react";
+import {
+  Search,
+  Star,
+  ArrowUpRight,
+  Sparkles,
+  TrendingUp,
+  Eye,
+  Megaphone,
+  BarChart3,
+  Pickaxe,
+  Video,
+  Mic,
+  Twitter,
+  Mail,
+  PenTool,
+  Palette,
+  Rocket,
+  Package,
+} from "lucide-react";
+
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  megaphone: Megaphone,
+  'chart-bar': BarChart3,
+  pickaxe: Pickaxe,
+  video: Video,
+  mic: Mic,
+  twitter: Twitter,
+  mail: Mail,
+  'pen-tool': PenTool,
+  palette: Palette,
+  rocket: Rocket,
+};
 
 function MarketplaceContent() {
   const searchParams = useSearchParams();
@@ -51,7 +82,8 @@ function MarketplaceContent() {
   };
 
   const getCategoryIcon = (id: SupplierCategory) => {
-    return SUPPLIER_CATEGORIES.find((c) => c.id === id)?.icon || "📦";
+    const iconName = SUPPLIER_CATEGORIES.find((c) => c.id === id)?.icon || "package";
+    return CATEGORY_ICONS[iconName] || Package;
   };
 
   return (
@@ -153,24 +185,27 @@ function MarketplaceContent() {
 
           {/* category pills */}
           <div className="flex flex-wrap gap-2">
-            {SUPPLIER_CATEGORIES.map((category) => (
-              <button
-                key={category.id}
-                onClick={() =>
-                  setSelectedCategory(
-                    selectedCategory === category.id ? null : category.id
-                  )
-                }
-                className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                  selectedCategory === category.id
-                    ? "bg-foreground text-background"
-                    : "bg-secondary text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <span className="mr-1.5">{category.icon}</span>
-                {category.label}
-              </button>
-            ))}
+            {SUPPLIER_CATEGORIES.map((category) => {
+              const IconComponent = CATEGORY_ICONS[category.icon];
+              return (
+                <button
+                  key={category.id}
+                  onClick={() =>
+                    setSelectedCategory(
+                      selectedCategory === category.id ? null : category.id
+                    )
+                  }
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors ${
+                    selectedCategory === category.id
+                      ? "bg-foreground text-background"
+                      : "bg-secondary text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {IconComponent && <IconComponent className="w-3.5 h-3.5" />}
+                  {category.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -195,7 +230,10 @@ function MarketplaceContent() {
                 </div>
 
                 <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-secondary rounded text-xs text-muted-foreground mb-3">
-                  <span>{getCategoryIcon(supplier.category)}</span>
+                  {(() => {
+                    const IconComponent = getCategoryIcon(supplier.category);
+                    return <IconComponent className="w-3 h-3" />;
+                  })()}
                   {getCategoryLabel(supplier.category)}
                 </div>
 

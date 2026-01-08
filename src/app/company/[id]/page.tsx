@@ -32,6 +32,8 @@ import {
   Activity,
   AlertTriangle,
   Info,
+  Twitter,
+  Play,
 } from "lucide-react";
 
 export default function CompanyPage() {
@@ -386,8 +388,12 @@ export default function CompanyPage() {
                       className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg hover:bg-secondary transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded bg-secondary flex items-center justify-center text-sm">
-                          {content.type === "twitter" ? "𝕏" : "▶"}
+                        <div className="w-8 h-8 rounded bg-secondary flex items-center justify-center">
+                          {content.type === "twitter" ? (
+                            <Twitter className="w-4 h-4" />
+                          ) : (
+                            <Play className="w-4 h-4" />
+                          )}
                         </div>
                         <span className="text-sm">{content.type} post</span>
                       </div>

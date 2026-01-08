@@ -14,7 +14,35 @@ import {
   SUPPLIER_CATEGORIES,
   DISCLAIMER,
 } from "@/lib/data";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import {
+  ArrowRight,
+  ExternalLink,
+  Twitter,
+  Play,
+  Music,
+  Megaphone,
+  BarChart3,
+  Pickaxe,
+  Video,
+  Mic,
+  Mail,
+  PenTool,
+  Palette,
+  Rocket,
+} from "lucide-react";
+
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  megaphone: Megaphone,
+  'chart-bar': BarChart3,
+  pickaxe: Pickaxe,
+  video: Video,
+  mic: Mic,
+  twitter: Twitter,
+  mail: Mail,
+  'pen-tool': PenTool,
+  palette: Palette,
+  rocket: Rocket,
+};
 
 export default function HomePage() {
   const cluely = COMPANIES.find((c) => c.id === "cluely");
@@ -157,8 +185,14 @@ export default function HomePage() {
                       <GlassCard hover className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-lg">
-                              {content.type === "twitter" ? "𝕏" : content.type === "youtube" ? "▶" : "♪"}
+                            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                              {content.type === "twitter" ? (
+                                <Twitter className="w-5 h-5" />
+                              ) : content.type === "youtube" ? (
+                                <Play className="w-5 h-5" />
+                              ) : (
+                                <Music className="w-5 h-5" />
+                              )}
                             </div>
                             <div>
                               <p className="text-sm font-medium">
@@ -283,14 +317,19 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            {SUPPLIER_CATEGORIES.map((category) => (
-              <Link key={category.id} href={`/marketplace?category=${category.id}`}>
-                <GlassCard hover className="p-4 text-center">
-                  <p className="text-xl mb-1">{category.icon}</p>
-                  <p className="text-sm">{category.label}</p>
-                </GlassCard>
-              </Link>
-            ))}
+            {SUPPLIER_CATEGORIES.map((category) => {
+              const IconComponent = CATEGORY_ICONS[category.icon];
+              return (
+                <Link key={category.id} href={`/marketplace?category=${category.id}`}>
+                  <GlassCard hover className="p-4 text-center">
+                    <div className="flex justify-center mb-2">
+                      {IconComponent && <IconComponent className="w-5 h-5 text-muted-foreground" />}
+                    </div>
+                    <p className="text-sm">{category.label}</p>
+                  </GlassCard>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

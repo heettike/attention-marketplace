@@ -1,30 +1,32 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Card as ShadcnCard } from "@/components/ui/card";
 import { forwardRef, HTMLAttributes } from "react";
+import { ArrowRight } from "lucide-react";
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   hover?: boolean;
 }
 
-const Card = forwardRef<HTMLDivElement, CardProps>(
+const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
   ({ className, hover = false, children, ...props }, ref) => {
     return (
-      <div
+      <ShadcnCard
         ref={ref}
         className={cn(
-          "card-clean p-6",
-          hover && "transition-colors cursor-pointer hover:border-[#333]",
+          "card-clean p-6 border-white/10",
+          hover && "transition-all cursor-pointer hover:border-white/20 hover:bg-white/[0.02]",
           className
         )}
         {...props}
       >
         {children}
-      </div>
+      </ShadcnCard>
     );
   }
 );
-Card.displayName = "Card";
+GlassCard.displayName = "GlassCard";
 
 interface StatCardProps {
   label: string;
@@ -36,7 +38,7 @@ interface StatCardProps {
 
 export function StatCard({ label, value, subValue, trend, className }: StatCardProps) {
   return (
-    <Card className={cn("", className)}>
+    <GlassCard className={cn("", className)}>
       <p className="text-sm text-muted-foreground mb-2">{label}</p>
       <p className="stat-number">{value}</p>
       {(subValue || trend !== undefined) && (
@@ -55,7 +57,7 @@ export function StatCard({ label, value, subValue, trend, className }: StatCardP
           {subValue && <span className="text-sm text-muted-foreground">{subValue}</span>}
         </div>
       )}
-    </Card>
+    </GlassCard>
   );
 }
 
@@ -72,7 +74,7 @@ export function ResultCard({ metric, before, after, supplier }: ResultCardProps)
       <p className="text-sm text-muted-foreground mb-1">{metric}</p>
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground line-through">{before}</span>
-        <span className="text-accent-green">→</span>
+        <ArrowRight className="w-3 h-3 text-accent-green" />
         <span className="font-semibold text-accent-green">{after}</span>
       </div>
       {supplier && (
@@ -82,5 +84,4 @@ export function ResultCard({ metric, before, after, supplier }: ResultCardProps)
   );
 }
 
-// keeping GlassCard as alias for backwards compat
-export { Card as GlassCard };
+export { GlassCard };
