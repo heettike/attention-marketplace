@@ -12,6 +12,7 @@ import {
   formatCurrency,
   formatNumber,
   SUPPLIERS,
+  DISCLAIMER,
 } from "@/lib/data";
 import {
   ArrowUpRight,
@@ -24,6 +25,13 @@ import {
   Eye,
   DollarSign,
   BookOpen,
+  Copy,
+  TrendingUp,
+  TrendingDown,
+  Droplets,
+  Activity,
+  AlertTriangle,
+  Info,
 } from "lucide-react";
 
 export default function CompanyPage() {
@@ -179,9 +187,167 @@ export default function CompanyPage() {
           />
           <StatCard label="holders" value={formatNumber(company.token.holders)} />
           <StatCard
-            label="followers"
-            value={formatNumber(company.metrics.followers)}
+            label="liquidity"
+            value={formatCurrency(company.token.liquidity)}
           />
+        </div>
+
+        {/* contract & trading info */}
+        <div className="grid lg:grid-cols-2 gap-4 mb-8">
+          {/* contract info */}
+          <GlassCard className="p-5">
+            <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
+              <Info className="w-4 h-4" />
+              contract info
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">chain</span>
+                <span className="text-sm font-medium">{company.token.chain}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">contract</span>
+                <div className="flex items-center gap-2">
+                  <code className="text-xs bg-secondary px-2 py-1 rounded font-mono">
+                    {company.token.contractAddress.slice(0, 6)}...{company.token.contractAddress.slice(-4)}
+                  </code>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(company.token.contractAddress)}
+                    className="p-1 hover:bg-secondary rounded transition-colors"
+                    title="copy address"
+                  >
+                    <Copy className="w-3 h-3 text-muted-foreground" />
+                  </button>
+                  <a
+                    href={`https://basescan.org/token/${company.token.contractAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1 hover:bg-secondary rounded transition-colors"
+                    title="view on basescan"
+                  >
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">dex</span>
+                <span className="text-sm">{company.token.dex}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">pool</span>
+                <div className="flex items-center gap-2">
+                  <code className="text-xs bg-secondary px-2 py-1 rounded font-mono">
+                    {company.token.poolAddress.slice(0, 6)}...{company.token.poolAddress.slice(-4)}
+                  </code>
+                  <a
+                    href={`https://basescan.org/address/${company.token.poolAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1 hover:bg-secondary rounded transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
+
+          {/* volume breakdown */}
+          <GlassCard className="p-5">
+            <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
+              <Activity className="w-4 h-4" />
+              volume breakdown
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">24h</span>
+                <span className="text-sm font-mono">{formatCurrency(company.token.volume24h)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">7d</span>
+                <span className="text-sm font-mono">{formatCurrency(company.token.volume7d)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground">30d</span>
+                <span className="text-sm font-mono">{formatCurrency(company.token.volume30d)}</span>
+              </div>
+              <div className="pt-3 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground flex items-center gap-1">
+                    <Droplets className="w-3 h-3" />
+                    liquidity
+                  </span>
+                  <span className="text-sm font-mono text-accent-green">{formatCurrency(company.token.liquidity)}</span>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* top holders & recent trades */}
+        <div className="grid lg:grid-cols-2 gap-4 mb-8">
+          {/* top holders */}
+          <GlassCard className="p-5">
+            <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              top holders
+            </h3>
+            <div className="space-y-2">
+              {company.token.topHolders.map((holder, i) => (
+                <div key={i} className="flex items-center justify-between py-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground w-4">{i + 1}</span>
+                    <code className="text-xs font-mono">{holder.address}</code>
+                    {holder.label && (
+                      <span className="text-xs px-1.5 py-0.5 bg-accent-warm/10 text-accent-warm rounded">
+                        {holder.label}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-sm font-mono">{holder.percentage}%</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 pt-3 border-t border-border">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">top 5 concentration</span>
+                <span className="font-mono">
+                  {company.token.topHolders.reduce((acc, h) => acc + h.percentage, 0).toFixed(1)}%
+                </span>
+              </div>
+            </div>
+          </GlassCard>
+
+          {/* recent trades */}
+          <GlassCard className="p-5">
+            <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
+              <Activity className="w-4 h-4" />
+              recent trades
+            </h3>
+            <div className="space-y-2">
+              {company.token.recentTrades.map((trade, i) => (
+                <div key={i} className="flex items-center justify-between py-1">
+                  <div className="flex items-center gap-2">
+                    {trade.type === 'buy' ? (
+                      <TrendingUp className="w-3 h-3 text-accent-green" />
+                    ) : (
+                      <TrendingDown className="w-3 h-3 text-accent-red" />
+                    )}
+                    <span className={`text-xs font-medium ${trade.type === 'buy' ? 'text-accent-green' : 'text-accent-red'}`}>
+                      {trade.type.toUpperCase()}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {formatNumber(trade.amount)} {company.ticker}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs">
+                    <span className="font-mono">${formatPrice(trade.price)}</span>
+                    <span className="text-muted-foreground">{trade.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
 
         {/* two column layout */}
@@ -403,6 +569,38 @@ export default function CompanyPage() {
                 </Button>
               </Link>
             </GlassCard>
+          </div>
+        </div>
+
+        {/* legal disclaimer */}
+        <div className="mt-12 p-5 bg-accent-red/5 border border-accent-red/20 rounded-lg">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-accent-red flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-sm font-medium mb-2 text-accent-red">important disclaimer</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {DISCLAIMER}
+              </p>
+              <div className="mt-4 pt-4 border-t border-border space-y-2">
+                <p className="text-xs text-muted-foreground">
+                  <strong className="text-foreground">this token is NOT:</strong>
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  <li>a security or investment product</li>
+                  <li>representative of ownership or equity in {company.name}</li>
+                  <li>a claim to any profits, dividends, or company assets</li>
+                  <li>regulated by any financial authority</li>
+                </ul>
+                <p className="text-xs text-muted-foreground mt-3">
+                  <strong className="text-foreground">this token IS:</strong>
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+                  <li>a mechanism for communities to signal attention and support</li>
+                  <li>a way to fund growth initiatives via trading tax</li>
+                  <li>subject to extreme volatility and potential total loss</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -17,7 +17,25 @@ export interface Company {
     priceChange24h: number;
     marketCap: number;
     volume24h: number;
+    volume7d: number;
+    volume30d: number;
     holders: number;
+    contractAddress: string;
+    chain: 'base';
+    dex: string;
+    poolAddress: string;
+    liquidity: number;
+    topHolders: {
+      address: string;
+      percentage: number;
+      label?: string;
+    }[];
+    recentTrades: {
+      type: 'buy' | 'sell';
+      amount: number;
+      price: number;
+      time: string;
+    }[];
   };
   growthWallet: {
     usdc: number;
@@ -144,7 +162,28 @@ export const COMPANIES: Company[] = [
       priceChange24h: 12.4,
       marketCap: 847000,
       volume24h: 124500,
+      volume7d: 892000,
+      volume30d: 3240000,
       holders: 2847,
+      contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
+      chain: 'base',
+      dex: 'uniswap v3',
+      poolAddress: '0xabcdef1234567890abcdef1234567890abcdef12',
+      liquidity: 156000,
+      topHolders: [
+        { address: '0x1234...5678', percentage: 40, label: 'growth wallet' },
+        { address: '0x2345...6789', percentage: 10, label: 'team' },
+        { address: '0x3456...7890', percentage: 4.2 },
+        { address: '0x4567...8901', percentage: 2.8 },
+        { address: '0x5678...9012', percentage: 1.9 },
+      ],
+      recentTrades: [
+        { type: 'buy', amount: 12500000, price: 0.000849, time: '2 min ago' },
+        { type: 'buy', amount: 8200000, price: 0.000845, time: '5 min ago' },
+        { type: 'sell', amount: 3100000, price: 0.000842, time: '8 min ago' },
+        { type: 'buy', amount: 25000000, price: 0.000838, time: '12 min ago' },
+        { type: 'buy', amount: 5600000, price: 0.000835, time: '15 min ago' },
+      ],
     },
     growthWallet: {
       usdc: 4250,
