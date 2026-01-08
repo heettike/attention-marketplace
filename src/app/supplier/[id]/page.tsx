@@ -306,7 +306,7 @@ export default function SupplierPage() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="font-semibold">how payments work on noice</h2>
             <a
-              href="https://docs.noice.so/marketplace/hiring"
+              href="/docs/marketplace/hiring"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-accent-warm hover:underline flex items-center gap-1"

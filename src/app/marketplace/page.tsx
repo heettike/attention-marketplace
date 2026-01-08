@@ -69,7 +69,7 @@ function MarketplaceContent() {
               </p>
             </div>
             <a
-              href="https://docs.noice.so/marketplace/hiring"
+              href="/docs/marketplace/hiring"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1.5 px-3 py-1.5 bg-secondary rounded-lg"

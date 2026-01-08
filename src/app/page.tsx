@@ -385,7 +385,7 @@ export default function HomePage() {
               <a href="#" className="hover:text-foreground transition-colors">
                 discord
               </a>
-              <a href="https://docs.noice.so" className="hover:text-foreground transition-colors">
+              <a href="/docs" className="hover:text-foreground transition-colors">
                 docs
               </a>
             </div>

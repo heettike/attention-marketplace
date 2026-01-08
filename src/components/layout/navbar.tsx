@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { href: "/", label: "home" },
   { href: "/marketplace", label: "marketplace" },
   { href: "/launch", label: "launch" },
-  { href: "https://docs.noice.so", label: "docs", external: true },
+  { href: "/docs", label: "docs" },
 ];
 
 export function Navbar() {

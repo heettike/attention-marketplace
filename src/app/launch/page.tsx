@@ -247,7 +247,7 @@ export default function LaunchPage() {
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-sm font-medium">fixed tokenomics</p>
                       <a
-                        href="https://docs.noice.so/tokenomics"
+                        href="/docs/tokenomics"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs text-accent-warm hover:underline flex items-center gap-1"
