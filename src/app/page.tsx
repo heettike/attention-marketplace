@@ -1,445 +1,393 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { GlassCard, StatCard } from "@/components/ui/glass-card";
+import { GlassCard, StatCard, ResultCard } from "@/components/ui/glass-card";
 import { MiniChart } from "@/components/ui/price-chart";
-import { Badge } from "@/components/ui/badge";
 import {
   COMPANIES,
   PLATFORM_STATS,
   formatCurrency,
   formatPrice,
+  formatNumber,
   getFeaturedSuppliers,
   SUPPLIER_CATEGORIES,
+  DISCLAIMER,
 } from "@/lib/data";
-import { ArrowRight, Zap, TrendingUp, Users, Sparkles } from "lucide-react";
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
+import { ArrowRight, ExternalLink } from "lucide-react";
 
 export default function HomePage() {
-  const featuredSuppliers = getFeaturedSuppliers().slice(0, 4);
+  const cluely = COMPANIES.find((c) => c.id === "cluely");
+  const featuredSuppliers = getFeaturedSuppliers().slice(0, 6);
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-warm/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent-blue/10 rounded-full blur-[100px]" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
-          <motion.div
-            initial="initial"
-            animate="animate"
-            variants={staggerContainer}
-            className="text-center max-w-4xl mx-auto"
-          >
-            {/* Badge */}
-            <motion.div variants={fadeInUp}>
-              <Badge
-                variant="outline"
-                className="mb-6 px-4 py-1.5 text-sm border-accent-warm/30 text-accent-warm"
-              >
-                <Sparkles className="w-3.5 h-3.5 mr-2" />
-                Now live on Base
-              </Badge>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1
-              variants={fadeInUp}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
-            >
-              <span className="text-gradient">Speculation</span> is the
+      {/* hero - minimal */}
+      <section className="pt-24 pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl">
+            <p className="text-sm text-muted-foreground mb-4">
+              live on base
+            </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight mb-6 leading-[1.1]">
+              speculation is the
               <br />
               new distribution
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-xl sm:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto"
-            >
-              Launch a token. Earn from every trade. Spend it all on A++ growth
-              talent. Your startup&apos;s attention flywheel.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
+            </h1>
+            <p className="text-lg text-muted-foreground mb-8 max-w-xl">
+              launch an attention coin. earn from every trade. spend it on vetted growth talent.
+              your startup&apos;s flywheel.
+            </p>
+            <div className="flex gap-3">
               <Link href="/launch">
-                <Button
-                  size="lg"
-                  className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  Launch Your Token
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                <Button size="lg" className="text-sm">
+                  launch token
+                  <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
               <Link href="/marketplace">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-8 py-6 border-white/10 hover:bg-white/5"
-                >
-                  Browse Marketplace
+                <Button size="lg" variant="outline" className="text-sm">
+                  browse suppliers
                 </Button>
               </Link>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* Stats Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4"
-          >
+          {/* stats row */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard
-              label="Total Volume"
+              label="total volume"
               value={formatCurrency(PLATFORM_STATS.totalVolume)}
             />
             <StatCard
-              label="Startups Launched"
+              label="startups launched"
               value={PLATFORM_STATS.totalCompanies}
             />
             <StatCard
-              label="Growth Suppliers"
+              label="growth suppliers"
               value={PLATFORM_STATS.totalSuppliers}
             />
             <StatCard
-              label="Avg Day 1 Earnings"
+              label="avg day 1 earnings"
               value={formatCurrency(PLATFORM_STATS.avgDayOneEarnings)}
             />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              The attention flywheel
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Every trade generates revenue. Every dollar spent multiplies your reach.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Zap,
-                title: "1. Launch your token",
-                description:
-                  "Deploy in minutes. 50% to traders, 40% to your growth wallet, 10% to team.",
-              },
-              {
-                icon: TrendingUp,
-                title: "2. Speculation = Marketing",
-                description:
-                  "Every trade = 2% fee. 1.6% goes to your marketplace wallet. People talk about what they own.",
-              },
-              {
-                icon: Users,
-                title: "3. Hire A++ talent",
-                description:
-                  "Spend your earnings on vetted creators, newsletters, podcasts, and growth hackers.",
-              },
-            ].map((step, index) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <GlassCard className="p-8 h-full">
-                  <div className="w-12 h-12 rounded-xl bg-accent-warm/10 flex items-center justify-center mb-6">
-                    <step.icon className="w-6 h-6 text-accent-warm" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.description}</p>
-                </GlassCard>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* Live Companies */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-between mb-12"
-          >
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
-                Live on Noice
-              </h2>
-              <p className="text-muted-foreground">
-                Startups already turning speculation into distribution
-              </p>
+      {/* case study - cluely */}
+      {cluely && (
+        <section className="py-16 border-t border-border">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center gap-2 mb-8">
+              <span className="text-sm text-muted-foreground">case study</span>
+              <span className="text-sm text-muted-foreground">/</span>
+              <span className="text-sm">{cluely.name}</span>
             </div>
-            <Link href="/marketplace">
-              <Button variant="ghost" className="hidden sm:flex">
-                View all <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
-          </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {COMPANIES.map((company, index) => (
-              <motion.div
-                key={company.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link href={`/company/${company.id}`}>
-                  <GlassCard className="p-6 cursor-pointer" glow="warm">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-warm/20 to-accent-purple/20 flex items-center justify-center text-2xl font-bold">
-                          {company.name[0]}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-semibold">{company.name}</h3>
-                          <p className="text-sm text-muted-foreground">
-                            {company.ticker}
-                          </p>
-                        </div>
-                      </div>
-                      <Badge
-                        variant="outline"
-                        className={
-                          company.token.priceChange24h >= 0
-                            ? "border-accent-green/30 text-accent-green"
-                            : "border-accent-red/30 text-accent-red"
-                        }
-                      >
-                        {company.token.priceChange24h >= 0 ? "+" : ""}
-                        {company.token.priceChange24h.toFixed(1)}%
-                      </Badge>
+            <div className="grid lg:grid-cols-2 gap-12">
+              {/* left - info */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <h2 className="text-3xl font-semibold">{cluely.name}</h2>
+                  {cluely.funding && (
+                    <span className="text-sm text-accent-warm px-2 py-0.5 bg-accent-warm/10 rounded">
+                      {cluely.funding.raised} raised
+                    </span>
+                  )}
+                </div>
+                <p className="text-muted-foreground mb-2">{cluely.tagline}</p>
+                {cluely.funding && (
+                  <p className="text-sm text-muted-foreground mb-6">
+                    backed by {cluely.funding.investors.join(", ")}
+                  </p>
+                )}
+
+                {/* results */}
+                <div className="space-y-1 mb-8">
+                  {cluely.results.map((result, i) => (
+                    <ResultCard
+                      key={i}
+                      metric={result.metric}
+                      before={result.before}
+                      after={result.after}
+                      supplier={result.supplier}
+                    />
+                  ))}
+                </div>
+
+                {/* token stats */}
+                <GlassCard className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <p className="text-sm text-muted-foreground">{cluely.ticker}</p>
+                      <p className="text-2xl font-semibold">${formatPrice(cluely.token.price)}</p>
                     </div>
+                    <MiniChart data={cluely.priceHistory} width={100} height={40} />
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">mcap</p>
+                      <p className="font-medium">{formatCurrency(cluely.token.marketCap)}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">24h vol</p>
+                      <p className="font-medium">{formatCurrency(cluely.token.volume24h)}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">holders</p>
+                      <p className="font-medium">{formatNumber(cluely.token.holders)}</p>
+                    </div>
+                  </div>
+                </GlassCard>
+              </div>
 
-                    <p className="text-muted-foreground mb-4 line-clamp-1">
-                      {company.tagline}
-                    </p>
+              {/* right - viral content */}
+              <div>
+                <p className="text-sm text-muted-foreground mb-4">viral content</p>
+                <div className="space-y-4">
+                  {cluely.viralContent.map((content, i) => (
+                    <a
+                      key={i}
+                      href={content.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <GlassCard hover className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-lg">
+                              {content.type === "twitter" ? "𝕏" : content.type === "youtube" ? "▶" : "♪"}
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">
+                                {content.type} post
+                              </p>
+                              <p className="text-sm text-accent-green font-mono">
+                                {formatNumber(content.views)} views
+                              </p>
+                            </div>
+                          </div>
+                          <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                      </GlassCard>
+                    </a>
+                  ))}
+                </div>
 
+                {/* growth wallet */}
+                <div className="mt-6">
+                  <p className="text-sm text-muted-foreground mb-3">growth wallet</p>
+                  <GlassCard className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-2xl font-bold">
-                          ${formatPrice(company.token.price)}
+                        <p className="text-2xl font-semibold">
+                          ${formatNumber(cluely.growthWallet.usdc)}
                         </p>
-                        <p className="text-sm text-muted-foreground">
-                          MC: {formatCurrency(company.token.marketCap)}
-                        </p>
+                        <p className="text-sm text-muted-foreground">usdc available</p>
                       </div>
-                      <MiniChart data={company.priceHistory} width={120} height={40} />
+                      <div className="text-right">
+                        <p className="text-lg font-medium text-muted-foreground">
+                          {formatNumber(cluely.growthWallet.tokens)}
+                        </p>
+                        <p className="text-sm text-muted-foreground">tokens reserved</p>
+                      </div>
                     </div>
                   </GlassCard>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+                </div>
 
-      {/* Supplier Categories */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              The attention marketplace
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Vetted suppliers who know how to move the needle
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {SUPPLIER_CATEGORIES.map((category, index) => (
-              <motion.div
-                key={category.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <Link href={`/marketplace?category=${category.id}`}>
-                  <GlassCard
-                    className="p-6 text-center cursor-pointer"
-                    variant="subtle"
-                  >
-                    <div className="text-3xl mb-3">{category.icon}</div>
-                    <p className="font-medium">{category.label}</p>
-                  </GlassCard>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Suppliers */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center justify-between mb-12"
-          >
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-2">
-                Featured suppliers
-              </h2>
-              <p className="text-muted-foreground">
-                Hand-picked talent ready to amplify your reach
-              </p>
+                {/* hired suppliers */}
+                <div className="mt-6">
+                  <p className="text-sm text-muted-foreground mb-3">suppliers hired</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {cluely.hiredSuppliers.map((id) => (
+                      <Link
+                        key={id}
+                        href={`/supplier/${id}`}
+                        className="px-3 py-1 bg-secondary rounded-full text-sm hover:bg-secondary/80 transition-colors"
+                      >
+                        @{id}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <div className="mt-8 flex gap-3">
+              <Link href={`/company/${cluely.id}`}>
+                <Button variant="outline" size="sm">
+                  view full case study
+                  <ArrowRight className="ml-2 w-3 h-3" />
+                </Button>
+              </Link>
+              <a href={cluely.website} target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" size="sm">
+                  visit {cluely.name}
+                  <ExternalLink className="ml-2 w-3 h-3" />
+                </Button>
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* how it works */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl font-semibold mb-8">how it works</h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <GlassCard className="p-6">
+              <p className="text-sm text-muted-foreground mb-2">01</p>
+              <h3 className="font-semibold mb-2">launch your token</h3>
+              <p className="text-sm text-muted-foreground">
+                deploy in minutes. 50% to traders, 40% to your growth wallet, 10% to team.
+                paired to usdc on base.
+              </p>
+            </GlassCard>
+
+            <GlassCard className="p-6">
+              <p className="text-sm text-muted-foreground mb-2">02</p>
+              <h3 className="font-semibold mb-2">earn from speculation</h3>
+              <p className="text-sm text-muted-foreground">
+                2% fee on every trade. 1.6% goes to your marketplace wallet.
+                people talk about what they own.
+              </p>
+            </GlassCard>
+
+            <GlassCard className="p-6">
+              <p className="text-sm text-muted-foreground mb-2">03</p>
+              <h3 className="font-semibold mb-2">hire growth talent</h3>
+              <p className="text-sm text-muted-foreground">
+                spend earnings on vetted kols, market makers, trenching groups,
+                video producers, and more.
+              </p>
+            </GlassCard>
+          </div>
+        </div>
+      </section>
+
+      {/* supplier categories */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-semibold">marketplace</h2>
             <Link href="/marketplace">
-              <Button variant="ghost" className="hidden sm:flex">
-                View all <ArrowRight className="ml-2 w-4 h-4" />
+              <Button variant="ghost" size="sm">
+                view all
+                <ArrowRight className="ml-2 w-3 h-3" />
               </Button>
             </Link>
-          </motion.div>
+          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredSuppliers.map((supplier, index) => (
-              <motion.div
-                key={supplier.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link href={`/supplier/${supplier.id}`}>
-                  <GlassCard className="p-6 cursor-pointer h-full">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-2xl mb-4">
-                      {supplier.name[0]}
-                    </div>
-                    <h3 className="font-semibold mb-1">{supplier.name}</h3>
-                    <p className="text-sm text-accent-warm mb-2">
-                      {supplier.handle}
-                    </p>
-                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                      {supplier.tagline}
-                    </p>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        From ${supplier.rate.min.toLocaleString()}
-                      </span>
-                      <span className="text-accent-warm">
-                        {supplier.rating} ({supplier.reviewCount})
-                      </span>
-                    </div>
-                  </GlassCard>
-                </Link>
-              </motion.div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {SUPPLIER_CATEGORIES.map((category) => (
+              <Link key={category.id} href={`/marketplace?category=${category.id}`}>
+                <GlassCard hover className="p-4 text-center">
+                  <p className="text-xl mb-1">{category.icon}</p>
+                  <p className="text-sm">{category.label}</p>
+                </GlassCard>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <GlassCard className="p-12 md:p-20 text-center" variant="highlight">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Ready to turn attention
-                <br />
-                <span className="text-gradient">into action?</span>
+      {/* featured suppliers */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl font-semibold mb-8">featured suppliers</h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {featuredSuppliers.map((supplier) => (
+              <Link key={supplier.id} href={`/supplier/${supplier.id}`}>
+                <GlassCard hover className="p-5 h-full">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="font-medium">{supplier.name}</h3>
+                      <p className="text-sm text-accent-warm">{supplier.handle}</p>
+                    </div>
+                    <p className="text-sm font-mono">
+                      ${formatNumber(supplier.price)}
+                      <span className="text-muted-foreground">/{supplier.priceUnit.split(" ")[1] || supplier.priceUnit}</span>
+                    </p>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                    {supplier.tagline}
+                  </p>
+                  {supplier.results.length > 0 && (
+                    <div className="flex gap-3 text-xs">
+                      {supplier.results.slice(0, 2).map((r, i) => (
+                        <span key={i} className="text-accent-green font-mono">
+                          {r.value} {r.metric}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </GlassCard>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* cta */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <GlassCard className="p-8 md:p-12">
+            <div className="max-w-xl">
+              <h2 className="text-2xl font-semibold mb-4">
+                ready to turn attention into action?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
-                Join the startups already using speculation as their secret
-                distribution weapon.
+              <p className="text-muted-foreground mb-6">
+                join startups already using speculation as their distribution weapon.
+                a16z speedrun and yc s25 companies welcome.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex gap-3">
                 <Link href="/launch">
-                  <Button
-                    size="lg"
-                    className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    Launch Your Token
-                    <ArrowRight className="ml-2 w-5 h-5" />
+                  <Button>
+                    launch token
+                    <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-8 py-6 border-white/10 hover:bg-white/5"
-                >
-                  Talk to Us
+                <Button variant="outline">
+                  talk to us
                 </Button>
               </div>
-            </motion.div>
+            </div>
           </GlassCard>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* disclaimer */}
+      <section className="py-8 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <p className="text-xs text-muted-foreground max-w-2xl">
+            {DISCLAIMER}
+          </p>
+        </div>
+      </section>
+
+      {/* footer */}
+      <footer className="py-8 border-t border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-gradient-to-br from-accent-warm to-accent-warm-hover flex items-center justify-center">
-                <span className="text-black font-bold text-xs">N</span>
-              </div>
-              <span className="font-medium">noice</span>
-            </div>
+            <span className="font-medium">noice</span>
             <p className="text-sm text-muted-foreground">
-              Built for startups who want infinite distribution.
+              built for startups who want infinite distribution
             </p>
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link href="#" className="hover:text-foreground transition-colors">
-                Twitter
-              </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
-                Discord
-              </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
-                Docs
-              </Link>
+              <a href="#" className="hover:text-foreground transition-colors">
+                twitter
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                discord
+              </a>
+              <a href="https://docs.noice.so" className="hover:text-foreground transition-colors">
+                docs
+              </a>
             </div>
           </div>
         </div>

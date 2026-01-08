@@ -1,27 +1,23 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
-import { Badge } from "@/components/ui/badge";
 import {
   getSupplierById,
   getCompanyById,
   SUPPLIER_CATEGORIES,
+  formatNumber,
 } from "@/lib/data";
 import {
   ArrowLeft,
   Star,
-  Clock,
   DollarSign,
-  Twitter,
   Globe,
   ExternalLink,
   CheckCircle2,
   MessageSquare,
-  Briefcase,
 } from "lucide-react";
 
 export default function SupplierPage() {
@@ -32,9 +28,9 @@ export default function SupplierPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Supplier not found</h1>
+          <h1 className="text-xl font-semibold mb-2">supplier not found</h1>
           <Link href="/marketplace">
-            <Button variant="outline">Back to marketplace</Button>
+            <Button variant="outline">back to marketplace</Button>
           </Link>
         </div>
       </div>
@@ -47,54 +43,44 @@ export default function SupplierPage() {
     .filter(Boolean);
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-8"
-        >
+    <div className="min-h-screen py-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+        {/* back button */}
+        <div className="mb-8">
           <Link href="/marketplace">
-            <Button variant="ghost" className="text-muted-foreground">
+            <Button variant="ghost" size="sm" className="text-muted-foreground">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to marketplace
+              back to marketplace
             </Button>
           </Link>
-        </motion.div>
+        </div>
 
-        {/* Hero Section */}
+        {/* hero */}
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Main Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-2"
-          >
-            <div className="flex items-start gap-6 mb-6">
-              <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-4xl">
+          {/* main info */}
+          <div className="lg:col-span-2">
+            <div className="flex items-start gap-5 mb-6">
+              <div className="w-20 h-20 rounded-xl bg-secondary flex items-center justify-center text-3xl">
                 {supplier.name[0]}
               </div>
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-3xl font-bold">{supplier.name}</h1>
+                  <h1 className="text-2xl font-semibold">{supplier.name}</h1>
                   {supplier.featured && (
-                    <Badge className="bg-accent-warm/10 text-accent-warm border-0">
-                      Featured
-                    </Badge>
+                    <span className="text-xs text-accent-warm px-2 py-0.5 bg-accent-warm/10 rounded">
+                      featured
+                    </span>
                   )}
                 </div>
-                <p className="text-accent-warm text-lg mb-2">{supplier.handle}</p>
-                <Badge
-                  variant="outline"
-                  className="border-white/10 text-muted-foreground"
-                >
-                  {category?.icon} {category?.label}
-                </Badge>
+                <p className="text-accent-warm mb-2">{supplier.handle}</p>
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-secondary rounded text-xs text-muted-foreground">
+                  <span>{category?.icon}</span>
+                  {category?.label}
+                </span>
               </div>
             </div>
 
-            <p className="text-xl text-muted-foreground mb-6">
+            <p className="text-lg text-muted-foreground mb-4">
               {supplier.tagline}
             </p>
 
@@ -102,15 +88,14 @@ export default function SupplierPage() {
               {supplier.bio}
             </p>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <a
                 href={supplier.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="sm" className="border-white/10">
-                  <Twitter className="w-4 h-4 mr-2" />
-                  Twitter
+                <Button variant="outline" size="sm">
+                  twitter
                   <ExternalLink className="w-3 h-3 ml-2" />
                 </Button>
               </a>
@@ -120,129 +105,133 @@ export default function SupplierPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button variant="outline" size="sm" className="border-white/10">
+                  <Button variant="outline" size="sm">
                     <Globe className="w-4 h-4 mr-2" />
-                    Website
-                    <ExternalLink className="w-3 h-3 ml-2" />
+                    website
                   </Button>
                 </a>
               )}
             </div>
-          </motion.div>
+          </div>
 
-          {/* CTA Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <GlassCard className="p-6 sticky top-28" variant="highlight">
-              <div className="flex items-center gap-2 mb-4">
-                <Star className="w-5 h-5 text-accent-warm fill-accent-warm" />
-                <span className="text-xl font-bold">{supplier.rating}</span>
-                <span className="text-muted-foreground">
-                  ({supplier.reviewCount} reviews)
+          {/* cta card */}
+          <GlassCard className="p-5 h-fit">
+            <div className="flex items-center gap-2 mb-4">
+              <Star className="w-5 h-5 text-accent-warm fill-accent-warm" />
+              <span className="text-lg font-semibold">{supplier.rating}</span>
+              <span className="text-sm text-muted-foreground">
+                ({supplier.reviewCount} reviews)
+              </span>
+            </div>
+
+            {/* price prominently displayed */}
+            <div className="p-4 bg-secondary/50 rounded-lg mb-4">
+              <p className="text-2xl font-semibold">
+                ${formatNumber(supplier.price)}
+                <span className="text-sm font-normal text-muted-foreground ml-1">
+                  {supplier.priceUnit}
+                </span>
+              </p>
+            </div>
+
+            <div className="space-y-3 mb-6 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground flex items-center gap-2">
+                  <DollarSign className="w-4 h-4" />
+                  range
+                </span>
+                <span className="font-mono">
+                  ${formatNumber(supplier.rate.min)} - ${formatNumber(supplier.rate.max)}
                 </span>
               </div>
+            </div>
 
-              <div className="space-y-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <DollarSign className="w-4 h-4" />
-                    <span>Rate</span>
-                  </div>
-                  <span className="font-semibold">
-                    ${supplier.rate.min.toLocaleString()} - $
-                    {supplier.rate.max.toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="w-4 h-4" />
-                    <span>Timeline</span>
-                  </div>
-                  <span className="font-semibold">{supplier.timeline}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Briefcase className="w-4 h-4" />
-                    <span>Pricing</span>
-                  </div>
-                  <span className="font-semibold">{supplier.rate.unit}</span>
-                </div>
-              </div>
-
-              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mb-3">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Request Quote
-              </Button>
-              <Button variant="outline" className="w-full border-white/10">
-                Schedule Call
-              </Button>
-            </GlassCard>
-          </motion.div>
+            <Button className="w-full mb-3">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              request quote
+            </Button>
+            <Button variant="outline" className="w-full">
+              schedule call
+            </Button>
+          </GlassCard>
         </div>
 
-        {/* Portfolio Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-12"
-        >
-          <h2 className="text-2xl font-semibold mb-6">Portfolio</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {supplier.portfolio.map((item, index) => (
-              <GlassCard key={index} className="p-6">
-                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                <p className="text-muted-foreground mb-4">{item.description}</p>
-                {item.metrics && (
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-accent-green" />
-                    <span className="text-sm text-accent-green">
-                      {item.metrics}
-                    </span>
+        {/* results */}
+        {supplier.results.length > 0 && (
+          <GlassCard className="p-6 mb-8">
+            <h2 className="font-semibold mb-4">results they deliver</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {supplier.results.map((result, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-accent-green" />
+                  <div>
+                    <span className="text-muted-foreground">{result.metric}: </span>
+                    <span className="text-accent-green font-mono">{result.value}</span>
                   </div>
-                )}
-                {item.link && (
-                  <a
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-block"
-                  >
-                    <Button variant="ghost" size="sm">
-                      View project
-                      <ExternalLink className="w-3 h-3 ml-2" />
-                    </Button>
-                  </a>
-                )}
-              </GlassCard>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        )}
+
+        {/* deliverables */}
+        <GlassCard className="p-6 mb-8">
+          <h2 className="font-semibold mb-4">what you get</h2>
+          <div className="space-y-2">
+            {supplier.deliverables.map((item, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <CheckCircle2 className="w-4 h-4 text-accent-warm" />
+                <span>{item}</span>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </GlassCard>
 
-        {/* Clients on Noice */}
+        {/* portfolio */}
+        {supplier.portfolio.length > 0 && (
+          <div className="mb-8">
+            <h2 className="font-semibold mb-4">portfolio</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {supplier.portfolio.map((item, index) => (
+                <GlassCard key={index} className="p-5">
+                  <h3 className="font-medium mb-2">{item.title}</h3>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-accent-green" />
+                    <span className="text-sm text-accent-green">{item.metrics}</span>
+                  </div>
+                  {item.link && (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-block"
+                    >
+                      <Button variant="ghost" size="sm">
+                        view project
+                        <ExternalLink className="w-3 h-3 ml-2" />
+                      </Button>
+                    </a>
+                  )}
+                </GlassCard>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* clients on noice */}
         {clients.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-12"
-          >
-            <h2 className="text-2xl font-semibold mb-6">
-              Worked with on Noice
-            </h2>
-            <div className="flex flex-wrap gap-4">
+          <div className="mb-8">
+            <h2 className="font-semibold mb-4">worked with on noice</h2>
+            <div className="flex flex-wrap gap-3">
               {clients.map((company) => (
                 <Link key={company!.id} href={`/company/${company!.id}`}>
-                  <GlassCard className="p-4 flex items-center gap-3 cursor-pointer">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-warm/20 to-accent-purple/20 flex items-center justify-center text-lg font-bold">
+                  <GlassCard hover className="p-3 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center font-semibold">
                       {company!.name[0]}
                     </div>
                     <div>
-                      <p className="font-medium">{company!.name}</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="font-medium text-sm">{company!.name}</p>
+                      <p className="text-xs text-muted-foreground">
                         {company!.ticker}
                       </p>
                     </div>
@@ -250,53 +239,42 @@ export default function SupplierPage() {
                 </Link>
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
-        {/* What You Get */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <GlassCard className="p-8">
-            <h2 className="text-2xl font-semibold mb-6">
-              How payments work on Noice
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-accent-warm/10 flex items-center justify-center mb-4">
-                  <span className="text-accent-warm font-bold">1</span>
-                </div>
-                <h3 className="font-semibold mb-2">Request a quote</h3>
-                <p className="text-sm text-muted-foreground">
-                  Describe your project and the supplier will send you a custom
-                  proposal.
-                </p>
+        {/* how payments work */}
+        <GlassCard className="p-6">
+          <h2 className="font-semibold mb-6">how payments work on noice</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div>
+              <div className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center mb-3">
+                <span className="text-accent-warm font-semibold">1</span>
               </div>
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-accent-warm/10 flex items-center justify-center mb-4">
-                  <span className="text-accent-warm font-bold">2</span>
-                </div>
-                <h3 className="font-semibold mb-2">Pay from your wallet</h3>
-                <p className="text-sm text-muted-foreground">
-                  Use your marketplace wallet balance (USDC or tokens) to fund
-                  the project.
-                </p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-accent-warm/10 flex items-center justify-center mb-4">
-                  <span className="text-accent-warm font-bold">3</span>
-                </div>
-                <h3 className="font-semibold mb-2">Get results</h3>
-                <p className="text-sm text-muted-foreground">
-                  Supplier delivers the work. Payment is released upon your
-                  approval.
-                </p>
-              </div>
+              <h3 className="font-medium mb-1">request a quote</h3>
+              <p className="text-sm text-muted-foreground">
+                describe your project and the supplier will send you a custom proposal.
+              </p>
             </div>
-          </GlassCard>
-        </motion.div>
+            <div>
+              <div className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center mb-3">
+                <span className="text-accent-warm font-semibold">2</span>
+              </div>
+              <h3 className="font-medium mb-1">pay from your wallet</h3>
+              <p className="text-sm text-muted-foreground">
+                use your growth wallet balance (usdc or tokens) to fund the project.
+              </p>
+            </div>
+            <div>
+              <div className="w-8 h-8 rounded-lg bg-accent-warm/10 flex items-center justify-center mb-3">
+                <span className="text-accent-warm font-semibold">3</span>
+              </div>
+              <h3 className="font-medium mb-1">get results</h3>
+              <p className="text-sm text-muted-foreground">
+                supplier delivers the work. payment is released upon your approval.
+              </p>
+            </div>
+          </div>
+        </GlassCard>
       </div>
     </div>
   );

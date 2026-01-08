@@ -1,48 +1,30 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion, HTMLMotionProps } from "framer-motion";
-import { forwardRef } from "react";
+import { forwardRef, HTMLAttributes } from "react";
 
-interface GlassCardProps extends HTMLMotionProps<"div"> {
-  variant?: "default" | "highlight" | "subtle";
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
   hover?: boolean;
-  glow?: "warm" | "green" | "none";
 }
 
-const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
-  ({ className, variant = "default", hover = true, glow = "none", children, ...props }, ref) => {
-    const variants = {
-      default: "glass-panel",
-      highlight: "glass-panel-highlight",
-      subtle: "bg-white/[0.02] border border-white/[0.05] rounded-2xl",
-    };
-
-    const glowClasses = {
-      warm: "glow-warm",
-      green: "glow-green",
-      none: "",
-    };
-
+const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className, hover = false, children, ...props }, ref) => {
     return (
-      <motion.div
+      <div
         ref={ref}
         className={cn(
-          variants[variant],
-          glowClasses[glow],
-          hover && "transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]",
+          "card-clean p-6",
+          hover && "transition-colors cursor-pointer hover:border-[#333]",
           className
         )}
-        whileHover={hover ? { y: -2, scale: 1.005 } : undefined}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
         {...props}
       >
         {children}
-      </motion.div>
+      </div>
     );
   }
 );
-GlassCard.displayName = "GlassCard";
+Card.displayName = "Card";
 
 interface StatCardProps {
   label: string;
@@ -54,15 +36,15 @@ interface StatCardProps {
 
 export function StatCard({ label, value, subValue, trend, className }: StatCardProps) {
   return (
-    <GlassCard className={cn("p-6", className)}>
+    <Card className={cn("", className)}>
       <p className="text-sm text-muted-foreground mb-2">{label}</p>
-      <p className="stat-number text-gradient">{value}</p>
+      <p className="stat-number">{value}</p>
       {(subValue || trend !== undefined) && (
         <div className="flex items-center gap-2 mt-2">
           {trend !== undefined && (
             <span
               className={cn(
-                "text-sm font-medium",
+                "text-sm font-medium font-mono",
                 trend >= 0 ? "text-accent-green" : "text-accent-red"
               )}
             >
@@ -73,8 +55,32 @@ export function StatCard({ label, value, subValue, trend, className }: StatCardP
           {subValue && <span className="text-sm text-muted-foreground">{subValue}</span>}
         </div>
       )}
-    </GlassCard>
+    </Card>
   );
 }
 
-export { GlassCard };
+interface ResultCardProps {
+  metric: string;
+  before: string;
+  after: string;
+  supplier?: string;
+}
+
+export function ResultCard({ metric, before, after, supplier }: ResultCardProps) {
+  return (
+    <div className="result-highlight py-3">
+      <p className="text-sm text-muted-foreground mb-1">{metric}</p>
+      <div className="flex items-center gap-2">
+        <span className="text-muted-foreground line-through">{before}</span>
+        <span className="text-accent-green">→</span>
+        <span className="font-semibold text-accent-green">{after}</span>
+      </div>
+      {supplier && (
+        <p className="text-xs text-muted-foreground mt-1">via {supplier}</p>
+      )}
+    </div>
+  );
+}
+
+// keeping GlassCard as alias for backwards compat
+export { Card as GlassCard };

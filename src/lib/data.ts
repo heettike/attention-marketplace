@@ -1,32 +1,45 @@
-// Mock data for Noice - Attention Marketplace
+// noice - attention marketplace data
 
 export interface Company {
   id: string;
   name: string;
   ticker: string;
   tagline: string;
-  logo: string;
   website: string;
   twitter: string;
   category: 'ai' | 'consumer' | 'fintech' | 'saas' | 'crypto';
+  funding?: {
+    raised: string;
+    investors: string[];
+  };
   token: {
     price: number;
     priceChange24h: number;
     marketCap: number;
     volume24h: number;
     holders: number;
-    totalSupply: number;
   };
-  marketplaceWallet: {
-    balance: number; // in USDC
-    tokenBalance: number; // in company tokens
+  growthWallet: {
+    usdc: number;
+    tokens: number;
   };
   metrics: {
-    twitterFollowers: number;
+    followers: number;
     avgViews: number;
-    avgEngagement: number;
+    totalImpressions: number;
   };
-  hiredSuppliers: string[]; // supplier IDs
+  viralContent: {
+    url: string;
+    views: number;
+    type: 'twitter' | 'youtube' | 'tiktok';
+  }[];
+  results: {
+    metric: string;
+    before: string;
+    after: string;
+    supplier?: string;
+  }[];
+  hiredSuppliers: string[];
   priceHistory: { time: string; price: number }[];
 }
 
@@ -34,409 +47,465 @@ export interface Supplier {
   id: string;
   name: string;
   handle: string;
-  avatar: string;
   category: SupplierCategory;
   tagline: string;
   bio: string;
-  website?: string;
   twitter: string;
+  website?: string;
+  price: number;
+  priceUnit: string;
+  deliverables: string[];
+  results: {
+    metric: string;
+    value: string;
+  }[];
+  portfolio: {
+    title: string;
+    link?: string;
+    metrics: string;
+  }[];
+  clientsServed: string[];
+  featured: boolean;
+  rating: number;
+  reviewCount: number;
   rate: {
     min: number;
     max: number;
-    unit: string;
   };
-  timeline: string;
-  portfolio: {
-    title: string;
-    description: string;
-    link?: string;
-    metrics?: string;
-    image?: string;
-  }[];
-  clientsServed: string[]; // company IDs
-  rating: number;
-  reviewCount: number;
-  featured: boolean;
 }
 
 export type SupplierCategory =
-  | 'video-production'
+  | 'kols'
+  | 'market-makers'
+  | 'trenching'
+  | 'video'
   | 'podcasts'
   | 'twitter-growth'
   | 'design'
   | 'newsletters'
-  | 'seo'
-  | 'content-writing'
-  | 'launch-strategy';
+  | 'ghostwriting'
+  | 'launch';
 
 export const SUPPLIER_CATEGORIES: { id: SupplierCategory; label: string; icon: string }[] = [
-  { id: 'video-production', label: 'Video Production', icon: '🎬' },
-  { id: 'podcasts', label: 'Podcasts & Ad Slots', icon: '🎙️' },
-  { id: 'twitter-growth', label: 'Twitter Growth', icon: '🐦' },
-  { id: 'design', label: 'Design & Branding', icon: '🎨' },
-  { id: 'newsletters', label: 'Newsletters', icon: '📧' },
-  { id: 'seo', label: 'SEO & Content', icon: '🔍' },
-  { id: 'content-writing', label: 'Ghostwriting', icon: '✍️' },
-  { id: 'launch-strategy', label: 'Launch Strategy', icon: '🚀' },
+  { id: 'kols', label: 'kols', icon: '📢' },
+  { id: 'market-makers', label: 'market makers', icon: '📊' },
+  { id: 'trenching', label: 'trenching groups', icon: '⛏️' },
+  { id: 'video', label: 'video', icon: '🎬' },
+  { id: 'podcasts', label: 'podcasts', icon: '🎙️' },
+  { id: 'twitter-growth', label: 'twitter growth', icon: '🐦' },
+  { id: 'newsletters', label: 'newsletters', icon: '📧' },
+  { id: 'ghostwriting', label: 'ghostwriting', icon: '✍️' },
+  { id: 'design', label: 'design', icon: '🎨' },
+  { id: 'launch', label: 'launch strategy', icon: '🚀' },
 ];
 
-// Generate realistic price history
 function generatePriceHistory(basePrice: number, days: number = 30): { time: string; price: number }[] {
   const history: { time: string; price: number }[] = [];
-  let price = basePrice * 0.3; // Start from 30% of current price
+  let price = basePrice * 0.3;
 
   for (let i = days; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-
-    // Add some volatility
-    const change = (Math.random() - 0.4) * 0.15; // Slight upward bias
+    const change = (Math.random() - 0.4) * 0.15;
     price = price * (1 + change);
-    price = Math.max(price, basePrice * 0.1); // Floor
-
+    price = Math.max(price, basePrice * 0.1);
     history.push({
       time: date.toISOString().split('T')[0],
       price: parseFloat(price.toFixed(6)),
     });
   }
-
-  // Ensure last price matches current
   history[history.length - 1].price = basePrice;
-
   return history;
 }
 
-// Mock Companies
 export const COMPANIES: Company[] = [
   {
     id: 'cluely',
-    name: 'Cluely',
-    ticker: '$CLUELY',
-    tagline: 'AI that thinks with you, not for you',
-    logo: '/companies/cluely.svg',
+    name: 'cluely',
+    ticker: '$cluely',
+    tagline: 'ai that thinks with you, not for you',
     website: 'https://cluely.com',
-    twitter: '@clooly',
+    twitter: '@clulooy',
     category: 'ai',
+    funding: {
+      raised: '$5.6m',
+      investors: ['a16z', 'abstract ventures', 'gigafund'],
+    },
     token: {
       price: 0.000847,
       priceChange24h: 12.4,
       marketCap: 847000,
       volume24h: 124500,
       holders: 2847,
-      totalSupply: 1000000000,
     },
-    marketplaceWallet: {
-      balance: 4250,
-      tokenBalance: 40000000000,
+    growthWallet: {
+      usdc: 4250,
+      tokens: 40000000000,
     },
     metrics: {
-      twitterFollowers: 48200,
+      followers: 48200,
       avgViews: 125000,
-      avgEngagement: 4.2,
+      totalImpressions: 15400000,
     },
-    hiredSuppliers: ['threadguy', 'wordisbonz'],
+    viralContent: [
+      { url: 'https://x.com/cluely/status/1234567890', views: 2100000, type: 'twitter' },
+      { url: 'https://x.com/cluely/status/1234567891', views: 890000, type: 'twitter' },
+      { url: 'https://x.com/cluely/status/1234567892', views: 650000, type: 'twitter' },
+    ],
+    results: [
+      { metric: 'twitter followers', before: '12k', after: '48k', supplier: 'wordisbonz' },
+      { metric: 'avg post views', before: '15k', after: '125k', supplier: 'threadguy' },
+      { metric: 'daily signups', before: '45', after: '340' },
+    ],
+    hiredSuppliers: ['threadguy', 'wordisbonz', 'vnc'],
     priceHistory: generatePriceHistory(0.000847),
   },
-  {
-    id: 'demo-fintech',
-    name: 'PayFlow',
-    ticker: '$FLOW',
-    tagline: 'Payments that just work',
-    logo: '/companies/payflow.svg',
-    website: 'https://payflow.io',
-    twitter: '@payflow_io',
-    category: 'fintech',
-    token: {
-      price: 0.001234,
-      priceChange24h: -3.2,
-      marketCap: 1234000,
-      volume24h: 89000,
-      holders: 1923,
-      totalSupply: 1000000000,
-    },
-    marketplaceWallet: {
-      balance: 2890,
-      tokenBalance: 40000000000,
-    },
-    metrics: {
-      twitterFollowers: 23400,
-      avgViews: 67000,
-      avgEngagement: 3.1,
-    },
-    hiredSuppliers: ['rahul-design'],
-    priceHistory: generatePriceHistory(0.001234),
-  },
 ];
 
-// Mock Suppliers - Real people + expanded categories
 export const SUPPLIERS: Supplier[] = [
-  // Real suppliers from your list
+  // kols
   {
-    id: 'threadguy',
-    name: 'Thread Guy',
-    handle: '@notthreadguy',
-    avatar: '/suppliers/threadguy.jpg',
-    category: 'podcasts',
-    tagline: 'Podcast host & streamer with 500K+ reach',
-    bio: 'Host of multiple tech podcasts with combined audience of 500K+. Offering ad slots, sponsored segments, and full episode features for startups looking to reach engaged tech audiences.',
-    twitter: 'https://x.com/notthreadguy',
-    rate: { min: 2000, max: 10000, unit: 'per episode' },
-    timeline: '2-4 weeks',
+    id: 'ansem',
+    name: 'ansem',
+    handle: '@blknoiz06',
+    category: 'kols',
+    tagline: '2.1m followers, avg 500k views per post',
+    bio: 'one of the largest crypto kols. posts drive significant volume and attention.',
+    twitter: 'https://x.com/blknoiz06',
+    price: 15000,
+    priceUnit: 'per post',
+    deliverables: ['1 twitter post', '24hr pin', 'engagement reply thread'],
+    results: [
+      { metric: 'avg views', value: '500k+' },
+      { metric: 'avg volume spike', value: '3-5x' },
+    ],
     portfolio: [
-      {
-        title: 'Startup Spotlight Series',
-        description: 'Featured 12 YC startups in dedicated episodes',
-        metrics: '2.1M total listens',
-      },
-      {
-        title: 'Live Twitter Spaces',
-        description: 'Weekly spaces with 5K+ live listeners',
-        metrics: '89K avg replay views',
-      },
+      { title: '$wif call', link: 'https://x.com/blknoiz06/status/xxx', metrics: '12m views, 40x pump' },
+    ],
+    clientsServed: [],
+    featured: true,
+    rating: 4.9,
+    reviewCount: 127,
+    rate: { min: 15000, max: 25000 },
+  },
+  {
+    id: 'cobie',
+    name: 'cobie',
+    handle: '@coaborosz',
+    category: 'kols',
+    tagline: '800k followers, high signal account',
+    bio: 'og crypto twitter. selective posts but massive impact when he does.',
+    twitter: 'https://x.com/coabolosz',
+    price: 25000,
+    priceUnit: 'per mention',
+    deliverables: ['organic mention', 'spaces appearance'],
+    results: [
+      { metric: 'credibility boost', value: 'massive' },
+      { metric: 'holder quality', value: 'high conviction' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: true,
+    rating: 4.8,
+    reviewCount: 43,
+    rate: { min: 25000, max: 50000 },
+  },
+
+  // market makers
+  {
+    id: 'wintermute',
+    name: 'wintermute',
+    handle: '@wintermute_t',
+    category: 'market-makers',
+    tagline: 'top tier mm, $50b+ daily volume',
+    bio: 'leading algorithmic market maker. provides deep liquidity and tight spreads.',
+    twitter: 'https://x.com/wintermute_t',
+    website: 'https://wintermute.com',
+    price: 50000,
+    priceUnit: 'setup + monthly',
+    deliverables: ['liquidity provision', '24/7 market making', 'cex/dex coverage'],
+    results: [
+      { metric: 'spread reduction', value: '80%+' },
+      { metric: 'volume increase', value: '10x+' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: true,
+    rating: 4.9,
+    reviewCount: 89,
+    rate: { min: 50000, max: 150000 },
+  },
+  {
+    id: 'gsr',
+    name: 'gsr',
+    handle: '@gaborosz',
+    category: 'market-makers',
+    tagline: 'institutional grade mm since 2013',
+    bio: 'one of the oldest crypto market makers. deep relationships with major cexs.',
+    twitter: 'https://x.com/GSR_io',
+    website: 'https://gsr.io',
+    price: 75000,
+    priceUnit: 'setup + monthly',
+    deliverables: ['multi-venue mm', 'otc desk access', 'treasury management'],
+    results: [
+      { metric: 'cex listings', value: '5+ major' },
+      { metric: 'liquidity depth', value: '$10m+' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: false,
+    rating: 4.7,
+    reviewCount: 52,
+    rate: { min: 75000, max: 200000 },
+  },
+
+  // trenching groups
+  {
+    id: 'vnc',
+    name: 'vnc',
+    handle: '@vnctrench',
+    category: 'trenching',
+    tagline: 'elite trenching group, 500+ members',
+    bio: 'coordinated buying group with track record of 10x+ runners. early entry, diamond hands.',
+    twitter: 'https://x.com/vnctrench',
+    price: 5000,
+    priceUnit: 'per campaign',
+    deliverables: ['coordinated entry', 'social signal boost', 'hold commitment'],
+    results: [
+      { metric: 'avg entry mcap', value: '<$500k' },
+      { metric: 'success rate', value: '70%+' },
+    ],
+    portfolio: [
+      { title: '$bonk early', metrics: '150x from call' },
+      { title: '$wif early', metrics: '80x from call' },
     ],
     clientsServed: ['cluely'],
-    rating: 4.9,
-    reviewCount: 23,
     featured: true,
+    rating: 4.6,
+    reviewCount: 234,
+    rate: { min: 5000, max: 15000 },
   },
+  {
+    id: 'tnc',
+    name: 'tnc',
+    handle: '@tncalpha',
+    category: 'trenching',
+    tagline: 'degen collective, fast movers',
+    bio: 'known for catching early narratives. aggressive entry, quick exits on winners.',
+    twitter: 'https://x.com/tncalpha',
+    price: 3000,
+    priceUnit: 'per campaign',
+    deliverables: ['alpha leak', 'entry coordination', 'ct buzz'],
+    results: [
+      { metric: 'avg flip', value: '3-5x' },
+      { metric: 'turnaround', value: '24-48hrs' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: false,
+    rating: 4.4,
+    reviewCount: 156,
+    rate: { min: 3000, max: 8000 },
+  },
+  {
+    id: 'sailboat',
+    name: 'sailboat',
+    handle: '@sailboatcap',
+    category: 'trenching',
+    tagline: 'whale group, patient capital',
+    bio: 'high conviction plays only. larger bags, longer holds. quality over quantity.',
+    twitter: 'https://x.com/sailboatcap',
+    price: 10000,
+    priceUnit: 'per campaign',
+    deliverables: ['whale accumulation', 'holder base building', 'long term support'],
+    results: [
+      { metric: 'avg hold time', value: '30+ days' },
+      { metric: 'floor support', value: 'strong' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: false,
+    rating: 4.5,
+    reviewCount: 78,
+    rate: { min: 10000, max: 25000 },
+  },
+
+  // video
   {
     id: 'wordisbonz',
-    name: 'Word is Bond',
+    name: 'word is bond',
     handle: '@wordisbonz',
-    avatar: '/suppliers/wordisbonz.jpg',
-    category: 'video-production',
-    tagline: 'Cinematic brand films that go viral',
-    bio: 'Award-winning filmmaker creating brand documentaries and launch videos. Specialized in startup storytelling that captures attention and converts viewers into believers.',
+    category: 'video',
+    tagline: 'cinematic brand films, 10m+ total views',
+    bio: 'documentary-style startup videos that tell your story and go viral.',
     twitter: 'https://x.com/wordisbonz',
     website: 'https://wordisbond.studio',
-    rate: { min: 5000, max: 25000, unit: 'per project' },
-    timeline: '3-6 weeks',
+    price: 8000,
+    priceUnit: 'per video',
+    deliverables: ['3-5 min brand film', 'social cuts', 'raw footage'],
+    results: [
+      { metric: 'avg views', value: '800k+' },
+      { metric: 'share rate', value: '12%' },
+    ],
     portfolio: [
-      {
-        title: 'Founder Story: AI Startup',
-        description: '3-min documentary style launch video',
-        metrics: '1.2M views, 45K shares',
-      },
-      {
-        title: 'Product Demo Reel',
-        description: 'Fast-paced feature showcase',
-        metrics: '800K views',
-      },
+      { title: 'cluely launch film', link: 'https://x.com/cluely/status/xxx', metrics: '2.1m views' },
     ],
     clientsServed: ['cluely'],
-    rating: 4.8,
-    reviewCount: 18,
     featured: true,
+    rating: 4.9,
+    reviewCount: 67,
+    rate: { min: 8000, max: 20000 },
   },
+
+  // podcasts
   {
-    id: 'rahul-design',
-    name: 'Rahul Bhadoriya',
+    id: 'threadguy',
+    name: 'thread guy',
+    handle: '@notthreadguy',
+    category: 'podcasts',
+    tagline: 'tech podcast, 500k+ reach per episode',
+    bio: 'weekly tech podcast with engaged founder audience. ad slots and full episodes available.',
+    twitter: 'https://x.com/notthreadguy',
+    price: 3500,
+    priceUnit: 'per episode',
+    deliverables: ['60sec ad read', 'show notes mention', 'social clip'],
+    results: [
+      { metric: 'avg listens', value: '150k' },
+      { metric: 'conversion rate', value: '2.4%' },
+    ],
+    portfolio: [
+      { title: 'cluely feature ep', metrics: '340k listens, 8k signups' },
+    ],
+    clientsServed: ['cluely'],
+    featured: true,
+    rating: 4.8,
+    reviewCount: 112,
+    rate: { min: 3500, max: 10000 },
+  },
+
+  // newsletters
+  {
+    id: 'mfm',
+    name: 'my first million',
+    handle: '@theSamParr',
+    category: 'newsletters',
+    tagline: '1.5m subs, 45% open rate',
+    bio: 'largest business newsletter. reaches founders, operators, and builders.',
+    twitter: 'https://x.com/theSamParr',
+    price: 12000,
+    priceUnit: 'per placement',
+    deliverables: ['primary sponsor slot', '150 word copy', 'cta button'],
+    results: [
+      { metric: 'impressions', value: '600k+' },
+      { metric: 'avg clicks', value: '15k' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: true,
+    rating: 4.7,
+    reviewCount: 89,
+    rate: { min: 12000, max: 25000 },
+  },
+
+  // twitter growth
+  {
+    id: 'growthdan',
+    name: 'growth dan',
+    handle: '@growth_dan',
+    category: 'twitter-growth',
+    tagline: '0 to 100k in 90 days, guaranteed',
+    bio: 'twitter growth specialist. content strategy, ghostwriting, and engagement optimization.',
+    twitter: 'https://x.com/growth_dan',
+    price: 4000,
+    priceUnit: 'per month',
+    deliverables: ['4 threads/week', 'daily engagement', 'analytics report'],
+    results: [
+      { metric: 'avg growth', value: '+25k/month' },
+      { metric: 'engagement rate', value: '8%+' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: false,
+    rating: 4.6,
+    reviewCount: 203,
+    rate: { min: 4000, max: 8000 },
+  },
+
+  // ghostwriting
+  {
+    id: 'ghostpen',
+    name: 'ghost pen',
+    handle: '@ghostpen_',
+    category: 'ghostwriting',
+    tagline: 'founder voice, 10x amplified',
+    bio: 'executive ghostwriter for tech founders. threads, articles, thought leadership.',
+    twitter: 'https://x.com/ghostpen_',
+    price: 2500,
+    priceUnit: 'per month',
+    deliverables: ['8 threads', '2 long-form', 'editing'],
+    results: [
+      { metric: 'avg impressions', value: '500k/month' },
+      { metric: 'viral rate', value: '1 in 4' },
+    ],
+    portfolio: [],
+    clientsServed: [],
+    featured: false,
+    rating: 4.5,
+    reviewCount: 145,
+    rate: { min: 2500, max: 5000 },
+  },
+
+  // design
+  {
+    id: 'rahul',
+    name: 'rahul bhadoriya',
     handle: '@rahulbhadoriya',
-    avatar: '/suppliers/rahul.jpg',
     category: 'design',
-    tagline: 'Design systems that scale with you',
-    bio: 'Design agency founder with 10+ years crafting brand identities for tech startups. From logo to full design systems, we build visual languages that resonate.',
+    tagline: 'brand systems for startups',
+    bio: 'design agency for yc and a16z companies. logo to full design systems.',
     twitter: 'https://x.com/rahulbhadoriya',
     website: 'https://rahuldesign.co',
-    rate: { min: 3000, max: 15000, unit: 'per project' },
-    timeline: '2-4 weeks',
-    portfolio: [
-      {
-        title: 'Fintech Rebrand',
-        description: 'Complete visual identity overhaul',
-        metrics: 'Featured in Brand New',
-      },
-      {
-        title: 'SaaS Design System',
-        description: '200+ components, dark/light modes',
-        metrics: 'Adopted by 3 YC companies',
-      },
+    price: 5000,
+    priceUnit: 'per project',
+    deliverables: ['brand identity', 'design system', 'social templates'],
+    results: [
+      { metric: 'clients', value: '40+ startups' },
+      { metric: 'featured', value: 'brand new, awwwards' },
     ],
-    clientsServed: ['demo-fintech'],
-    rating: 4.9,
-    reviewCount: 31,
-    featured: true,
-  },
-  // Newsletter creators
-  {
-    id: 'mfm-ads',
-    name: 'My First Million',
-    handle: '@maborosz',
-    avatar: '/suppliers/mfm.jpg',
-    category: 'newsletters',
-    tagline: '1.5M subscribers, 45% open rate',
-    bio: 'One of the largest business newsletters with highly engaged audience of entrepreneurs, founders, and operators. Premium ad placements and dedicated sends available.',
-    twitter: 'https://x.com/maborosz',
-    rate: { min: 8000, max: 30000, unit: 'per placement' },
-    timeline: '1-2 weeks',
-    portfolio: [
-      {
-        title: 'Sponsor Spotlight',
-        description: 'Dedicated paragraph in main newsletter',
-        metrics: '500K+ impressions per send',
-      },
-    ],
+    portfolio: [],
     clientsServed: [],
-    rating: 4.7,
-    reviewCount: 45,
-    featured: true,
-  },
-  {
-    id: 'lenny',
-    name: "Lenny's Newsletter",
-    handle: '@lennysan',
-    avatar: '/suppliers/lenny.jpg',
-    category: 'newsletters',
-    tagline: 'The PM newsletter with 700K readers',
-    bio: "Lenny's Newsletter is the #1 product management newsletter. Reach PMs, founders, and operators at top tech companies. Extremely high-intent B2B audience.",
-    twitter: 'https://x.com/lennysan',
-    rate: { min: 15000, max: 40000, unit: 'per placement' },
-    timeline: '2-4 weeks',
-    portfolio: [
-      {
-        title: 'Primary Sponsor Slot',
-        description: 'Top placement in weekly newsletter',
-        metrics: '700K subscribers, 52% open rate',
-      },
-    ],
-    clientsServed: [],
-    rating: 4.9,
-    reviewCount: 28,
-    featured: true,
-  },
-  // Twitter Growth
-  {
-    id: 'twitter-maven',
-    name: 'Growth Maven',
-    handle: '@growthmaven',
-    avatar: '/suppliers/maven.jpg',
-    category: 'twitter-growth',
-    tagline: '0 to 100K followers in 90 days',
-    bio: 'Twitter growth strategist who has helped 50+ founders build audiences. Includes content strategy, ghostwriting, engagement pods, and viral thread frameworks.',
-    twitter: 'https://x.com/growthmaven',
-    rate: { min: 2500, max: 8000, unit: 'per month' },
-    timeline: 'Ongoing',
-    portfolio: [
-      {
-        title: 'Founder Account Growth',
-        description: 'Took founder from 2K to 120K in 4 months',
-        metrics: '15M impressions/month',
-      },
-      {
-        title: 'Viral Thread Package',
-        description: '4 threads/month with engagement strategy',
-        metrics: '89% hit 1M+ impressions',
-      },
-    ],
-    clientsServed: [],
-    rating: 4.6,
-    reviewCount: 52,
     featured: false,
-  },
-  // SEO
-  {
-    id: 'seo-wizard',
-    name: 'Search Wizard',
-    handle: '@seowizard',
-    avatar: '/suppliers/seo.jpg',
-    category: 'seo',
-    tagline: 'Page 1 or you don\'t pay',
-    bio: 'SEO agency specializing in startups. We do technical SEO, content strategy, and link building. Track record of 10x organic traffic growth.',
-    twitter: 'https://x.com/seowizard',
-    rate: { min: 4000, max: 12000, unit: 'per month' },
-    timeline: '3-6 months',
-    portfolio: [
-      {
-        title: 'SaaS SEO Overhaul',
-        description: 'Complete technical + content strategy',
-        metrics: '10x organic traffic in 6 months',
-      },
-    ],
-    clientsServed: [],
-    rating: 4.5,
-    reviewCount: 19,
-    featured: false,
-  },
-  // Launch Strategy
-  {
-    id: 'launch-pro',
-    name: 'Launch Pro',
-    handle: '@launchpro',
-    avatar: '/suppliers/launch.jpg',
-    category: 'launch-strategy',
-    tagline: '#1 on Product Hunt, guaranteed',
-    bio: 'Launch strategist with 15 #1 Product Hunt launches. Full service from pre-launch community building to launch day coordination to post-launch momentum.',
-    twitter: 'https://x.com/launchpro',
-    rate: { min: 5000, max: 20000, unit: 'per launch' },
-    timeline: '4-8 weeks',
-    portfolio: [
-      {
-        title: 'AI Tool Launch',
-        description: '#1 Product of the Day + Week',
-        metrics: '5K signups day 1',
-      },
-      {
-        title: 'Developer Tool Launch',
-        description: 'Coordinated PH + HN + Twitter',
-        metrics: '12K GitHub stars week 1',
-      },
-    ],
-    clientsServed: [],
     rating: 4.8,
-    reviewCount: 24,
-    featured: false,
+    reviewCount: 56,
+    rate: { min: 5000, max: 15000 },
   },
-  // Ghostwriting
+
+  // launch
   {
-    id: 'ghost-pen',
-    name: 'Ghost Pen',
-    handle: '@ghostpen',
-    avatar: '/suppliers/ghost.jpg',
-    category: 'content-writing',
-    tagline: 'Your voice, amplified 10x',
-    bio: 'Executive ghostwriter for tech founders. We capture your voice and ideas, then craft compelling threads, articles, and thought leadership content.',
-    twitter: 'https://x.com/ghostpen',
-    rate: { min: 1500, max: 5000, unit: 'per month' },
-    timeline: 'Ongoing',
-    portfolio: [
-      {
-        title: 'Founder Thought Leadership',
-        description: '8 threads + 2 long-form pieces/month',
-        metrics: 'Avg 500K impressions/month',
-      },
+    id: 'launchpro',
+    name: 'launch pro',
+    handle: '@launchpro_',
+    category: 'launch',
+    tagline: '#1 product hunt, guaranteed',
+    bio: '15 #1 launches. full service from community building to launch day coordination.',
+    twitter: 'https://x.com/launchpro_',
+    price: 8000,
+    priceUnit: 'per launch',
+    deliverables: ['ph optimization', 'launch day support', 'hunter outreach'],
+    results: [
+      { metric: 'success rate', value: '93%' },
+      { metric: 'avg upvotes', value: '1200+' },
     ],
+    portfolio: [],
     clientsServed: [],
+    featured: false,
     rating: 4.7,
-    reviewCount: 37,
-    featured: false,
-  },
-  // Video clips
-  {
-    id: 'clip-master',
-    name: 'Clip Master',
-    handle: '@clipmaster',
-    avatar: '/suppliers/clips.jpg',
-    category: 'video-production',
-    tagline: 'Turn long-form into viral clips',
-    bio: 'We take your podcasts, demos, and talks and turn them into scroll-stopping short-form content optimized for Twitter, TikTok, and Instagram.',
-    twitter: 'https://x.com/clipmaster',
-    rate: { min: 500, max: 2000, unit: 'per batch of 10' },
-    timeline: '3-5 days',
-    portfolio: [
-      {
-        title: 'Podcast Clip Package',
-        description: '20 clips from single episode',
-        metrics: 'Avg 100K views per clip',
-      },
-    ],
-    clientsServed: [],
-    rating: 4.6,
-    reviewCount: 67,
-    featured: false,
+    reviewCount: 34,
+    rate: { min: 8000, max: 15000 },
   },
 ];
 
-// Platform stats (for landing page)
+// platform stats
 export const PLATFORM_STATS = {
   totalVolume: 12847000,
   totalCompanies: 47,
@@ -444,13 +513,8 @@ export const PLATFORM_STATS = {
   avgDayOneEarnings: 2400,
 };
 
-// Tagline candidates for homepage
-export const TAGLINES = {
-  primary: "Speculation is the new distribution",
-  secondary: "Launch a coin. Earn from trades. Spend on growth.",
-  cta: "Turn attention into action",
-  hero: "Your startup's new growth engine",
-};
+// disclaimer
+export const DISCLAIMER = `attention coins are not securities. they do not represent ownership, equity, or any claim to profits or assets. they are purely a mechanism for communities to signal attention and support for projects. trading involves risk. only spend what you can afford to lose.`;
 
 export function getCompanyById(id: string): Company | undefined {
   return COMPANIES.find((c) => c.id === id);
@@ -476,8 +540,8 @@ export function formatPrice(price: number): string {
 }
 
 export function formatNumber(num: number): string {
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-  if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}m`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
   return num.toString();
 }
 
@@ -488,4 +552,30 @@ export function formatCurrency(num: number): string {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(num);
+}
+
+// recommend suppliers based on wallet balance
+export function getRecommendedStrategy(walletBalance: number): { suppliers: Supplier[]; message: string } {
+  if (walletBalance < 1000) {
+    return {
+      suppliers: SUPPLIERS.filter(s => s.price <= 1000).slice(0, 3),
+      message: 'start with organic growth',
+    };
+  }
+  if (walletBalance < 5000) {
+    return {
+      suppliers: SUPPLIERS.filter(s => s.category === 'twitter-growth' || s.category === 'ghostwriting').slice(0, 3),
+      message: 'focus on twitter presence',
+    };
+  }
+  if (walletBalance < 15000) {
+    return {
+      suppliers: SUPPLIERS.filter(s => s.category === 'kols' || s.category === 'trenching').slice(0, 3),
+      message: 'time for kol push + trenching',
+    };
+  }
+  return {
+    suppliers: SUPPLIERS.filter(s => s.category === 'market-makers' || s.featured).slice(0, 3),
+    message: 'ready for market maker + major kols',
+  };
 }
